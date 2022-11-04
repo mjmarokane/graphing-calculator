@@ -1,1 +1,56 @@
+:root {
+    --tile-background: #eeeeee;
+    --border-color-1: #333333;
+    --btn-color-1: orangered;
+    --border-radius-1: 12px;
+    --transition-duration-1: 0.3s;
+}
 
+body {
+    font-size: 16px;
+}
+
+.function input {
+    outline: none;
+    margin: 6px;
+    padding: 3px 9px;
+    border-radius: var(--border-radius-1);
+    border: 1px solid white;
+}
+
+.function input:focus {
+    border: 1px solid var(--border-color-1);
+}
+
+button, input[type="submit"] {
+    transition: var(--transition-duration-1);
+    padding: 5px;
+    margin: 6px;
+    border-width: 0px;
+}
+
+button:hover, input[type="submit"]:hover {
+    filter: brightness(150%);
+}
+
+div.function {
+    width: 100%;
+    background-color: var(--tile-background);
+    margin: 6px;
+    padding: 12px;
+    border-radius: var(--border-radius-1);
+}
+
+.func-exp {
+    width: 85%;
+}
+
+.domain {
+    width: 35%;
+}
+
+#draw {
+    width: 100%;
+    border-radius: var(--border-radius-1);
+    background-color: var(--btn-color-1);
+}
