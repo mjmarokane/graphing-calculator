@@ -1,7 +1,8 @@
 :root {
     --tile-background: #eeeeee;
     --border-color-1: #333333;
-    --btn-color-1: orangered;
+    --btn-color-1: #6fd9fc;
+    --btn-active-color-1: #3b3b3b;
     --border-radius-1: 12px;
     --transition-duration-1: 0.3s;
 }
@@ -22,15 +23,29 @@ body {
     border: 1px solid var(--border-color-1);
 }
 
+#add-more {
+    background-color: var(--tile-background);
+}
+
+#add-more:hover {
+    filter: brightness(75%);
+}
+
 button, input[type="submit"] {
+    outline: none;
     transition: var(--transition-duration-1);
-    padding: 5px;
+    padding: 5px 12px;
     margin: 6px;
     border-width: 0px;
+    border-radius: var(--border-radius-1);
 }
 
 button:hover, input[type="submit"]:hover {
-    filter: brightness(150%);
+    filter: brightness(125%);
+}
+
+button:focus {
+    outline: none;
 }
 
 div.function {
@@ -53,4 +68,10 @@ div.function {
     width: 100%;
     border-radius: var(--border-radius-1);
     background-color: var(--btn-color-1);
+}
+
+#draw:active, #add-more:active {
+    transition: 0s;
+    color: black;
+    filter: brightness(100%);
 }
