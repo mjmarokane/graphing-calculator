@@ -3,8 +3,7 @@
 let numFunctions = 1;
 
 init = () => {
-    draw();
-    console.log("done");
+    Plotly.newPlot("graph");
 };
 
 let draw = (functionIndex) => {
@@ -22,12 +21,7 @@ let draw = (functionIndex) => {
             type: 'scatter'
         }];
 
-        if (functionIndex == 1) {
-            Plotly.newPlot("graph", graphData);
-        }
-        else {
-            Plotly.plot("graph", graphData);
-        }
+        Plotly.plot("graph", graphData);
     }
     catch (err) {
         console.log(err);
@@ -36,7 +30,11 @@ let draw = (functionIndex) => {
 
 document.querySelector("#functions").onsubmit = (e) => {
     e.preventDefault();
-    draw(numFunctions);
+    Plotly.newPlot("graph");
+    for (let i = 1; i <= numFunctions; i++) {
+        draw(i);
+        console.log("drew");
+    }
 };
 
 document.querySelector("#add-more").onclick = () => {
