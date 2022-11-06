@@ -1,16 +1,18 @@
 /*jshint esversion: 6*/
 
+let numFunctions = 1;
+
 init = () => {
     draw();
     console.log("done");
 };
 
-let draw = () => {
+let draw = (functionIndex) => {
     try {
-        let functionExp = math.compile(document.querySelector("#func-exp-1").value);
-        let domainMin = document.querySelector("#domain-min-1").value;
-        let domainMax = document.querySelector("#domain-max-1").value;
-        
+        let functionExp = math.compile(document.querySelector(`#func-exp-${functionIndex}`).value);
+        let domainMin = document.querySelector(`#domain-min-${functionIndex}`).value;
+        let domainMax = document.querySelector(`#domain-max-${functionIndex}`).value;
+
         let xValues = math.range(domainMin, domainMax, 0.01).toArray();
         let yValues = xValues.map( (x) => functionExp.evaluate({x: x}));
 
@@ -20,7 +22,12 @@ let draw = () => {
             type: 'scatter'
         }];
 
-        Plotly.newPlot("graph", graphData);
+        if (functionIndex == 1) {
+            Plotly.newPlot("graph", graphData);
+        }
+        else {
+            Plotly.plot("graph", graphData);
+        }
     }
     catch (err) {
         console.log(err);
@@ -29,7 +36,22 @@ let draw = () => {
 
 document.querySelector("#functions").onsubmit = (e) => {
     e.preventDefault();
-    draw();
+    draw(numFunctions);
+};
+
+document.querySelector("#add-more").onclick = () => {
+    numFunctions++;
+
+    let newFunction = document.createElement("div");
+    let existingFunctions = document.querySelector("#functions");
+
+    newFunction.setAttribute("class", "function");
+    newFunction.innerHTML = `<label for="func-exp-1" >y=</label><input type="text" class="func-exp" id="func-exp-${numFunctions}">
+                             <input type="number" value="-6" class="domain" id="domain-min-${numFunctions}">
+                            <span>&le;x&le;</span>
+                            <input type="number" value="6" class="domain" id="domain-max-${numFunctions}"></input>`;
+
+    existingFunctions.insertBefore(newFunction, document.querySelector("#add-more"));
 };
 
 init();
