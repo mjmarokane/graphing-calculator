@@ -1,6 +1,10 @@
 /*jshint esversion: 6*/
 
+//error codes
+const ERR_DOMAIN = 1;
+
 let numFunctions = 1;
+
 let defaultData = () => {
     let xValues = math.range(domainMin, domainMax, 0.01).toArray();
     let yValues = xValues.map( (x) => functionExp.evaluate({x: x}));
@@ -25,15 +29,33 @@ let layout = {
     }
   };
 
-init = () => {
+let init = () => {
     Plotly.newPlot("graph", defaultData, layout);
 };
 
+let domainErrCheck = (domainMin, domainMax, functionIndex) => {
+    domainMin = parseFloat(domainMin);
+    domainMax = parseFloat(domainMax);
+    if (domainMin >= domainMax){
+        document.querySelector(`#domain-min-${functionIndex}`).setAttribute("data-error", `${ERR_DOMAIN}`);
+        document.querySelector(`#domain-max-${functionIndex}`).setAttribute("data-error", `${ERR_DOMAIN}`);
+    }
+};
+
+let clearDomainErrs = (functionIndex) => {
+    document.querySelector(`#domain-min-${functionIndex}`).setAttribute("data-error", `0`);
+    document.querySelector(`#domain-max-${functionIndex}`).setAttribute("data-error", `0`);
+};
+
 let draw = (functionIndex) => {
+    clearDomainErrs(functionIndex);
+
     try {
         let functionExp = math.compile(document.querySelector(`#func-exp-${functionIndex}`).value);
         let domainMin = document.querySelector(`#domain-min-${functionIndex}`).value;
         let domainMax = document.querySelector(`#domain-max-${functionIndex}`).value;
+        
+        domainErrCheck(domainMin, domainMax, functionIndex);
 
         let xValues = math.range(domainMin, domainMax, 0.01).toArray();
         let yValues = xValues.map( (x) => functionExp.evaluate({x: x}));
