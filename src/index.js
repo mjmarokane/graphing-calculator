@@ -6,7 +6,8 @@ const ERR_DOMAIN = 1;
 let numFunctions = 1;
 
 let defaultData = () => {
-    let xValues = math.range(domainMin, domainMax, 0.01).toArray();
+    let functionExp = math.compile("");
+    let xValues = math.range(-6, 6, 0.01).toArray();
     let yValues = xValues.map( (x) => functionExp.evaluate({x: x}));
 
     return [{
@@ -30,7 +31,7 @@ let layout = {
   };
 
 let init = () => {
-    Plotly.newPlot("graph", defaultData, layout);
+    Plotly.newPlot("graph", defaultData(), layout);
 };
 
 let domainErrCheck = (domainMin, domainMax, functionIndex) => {
@@ -75,7 +76,7 @@ let draw = (functionIndex) => {
 
 document.querySelector("#functions").onsubmit = (e) => {
     e.preventDefault();
-    Plotly.newPlot("graph", defaultData, layout);
+    Plotly.newPlot("graph", defaultData(), layout);
     for (let i = 1; i <= numFunctions; i++) {
         draw(i);
     }
