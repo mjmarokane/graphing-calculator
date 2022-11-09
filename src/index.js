@@ -76,7 +76,7 @@ let draw = (functionIndex) => {
 
 document.querySelector("#functions").onsubmit = (e) => {
     e.preventDefault();
-    Plotly.newPlot("graph", defaultData(), layout);
+    Plotly.newPlot("graph", layout);
     for (let i = 1; i <= numFunctions; i++) {
         draw(i);
     }
