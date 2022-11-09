@@ -1,14 +1,21 @@
 :root {
-    --tile-background: #eeeeee;
+    --color-1: #f0f0f0;
     --border-color-1: #333333;
     --btn-color-1: #6fd9fc;
     --btn-active-color-1: #3b3b3b;
     --border-radius-1: 12px;
     --transition-duration-1: 0.3s;
+    --shadow-color-1: rgb(201, 201, 201);
 }
 
 body {
     font-size: 16px;
+    background-color: white;
+}
+
+.navbar {
+    box-shadow: 0 2px 6px 0 var(--shadow-color-1);
+    background-color: var(--color-1);
 }
 
 .function input {
@@ -24,11 +31,12 @@ body {
 }
 
 #add-more {
-    background-color: var(--tile-background);
+    background-color: var(--color-1);
 }
 
 #add-more:hover {
-    filter: brightness(75%);
+    filter: brightness(110%);
+    box-shadow: 2px 2px 2px 0 var(--shadow-color-1);
 }
 
 input[data-error="1"] {
@@ -39,6 +47,7 @@ input[data-error="1"] {
 button, input[type="submit"] {
     outline: none;
     transition: var(--transition-duration-1);
+    box-shadow: 2px 2px 6px 0 var(--shadow-color-1);
     padding: 5px 12px;
     margin: 6px;
     border-width: 0px;
@@ -46,7 +55,8 @@ button, input[type="submit"] {
 }
 
 button:hover, input[type="submit"]:hover {
-    filter: brightness(125%);
+    filter: brightness(110%);
+    box-shadow:1px 1px 2px 0 var(--shadow-color-1);
 }
 
 button:focus {
@@ -55,10 +65,11 @@ button:focus {
 
 div.function {
     width: 100%;
-    background-color: var(--tile-background);
-    margin: 6px;
+    background-color: var(--color-1);
+    margin: 16px 6px;
     padding: 12px;
     border-radius: var(--border-radius-1);
+    box-shadow: 2px 2px 6px 0 var(--shadow-color-1);
 }
 
 .func-exp {
@@ -67,6 +78,10 @@ div.function {
 
 .domain {
     width: 35%;
+}
+
+#graph {
+    margin-top: 12px;
 }
 
 #draw {
