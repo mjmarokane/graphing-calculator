@@ -35,36 +35,39 @@ let init = () => {
     Plotly.newPlot("graph", defaultData(), layout);
 };
 
-let domainErrCheck = (mathFunction) => {
-    let domainMin = mathFunction.querySelector(`.domain-min`);
-    let domainMax = mathFunction.querySelector(`.domain-max`);
+let checkFuncErrs = (mathFunction) => {
+    //check domain errors
+    let domainMin = mathFunction.querySelector(".domain-min");
+    let domainMax = mathFunction.querySelector(".domain-max");
     if (parseFloat(domainMin.value) >= parseFloat(domainMax.value)){
         domainMin.setAttribute("data-error", `${ERR_DOMAIN}`);
         domainMax.setAttribute("data-error", `${ERR_DOMAIN}`);
     }
 };
 
-let clearDomainErrs = (mathFunction) => {
-    mathFunction.querySelector(`.domain-min`).setAttribute("data-error", `0`);
-    mathFunction.querySelector(`.domain-max`).setAttribute("data-error", `0`);
+let resetFuncErrs = (mathFunction) => {
+    //clear domain errors
+    mathFunction.querySelector(".domain-min").setAttribute("data-error", `0`);
+    mathFunction.querySelector(".domain-max").setAttribute("data-error", `0`);
+    //clear function validity erros
+    mathFunction.querySelector(".func-exp").setAttribute("data-valid", "true");
 };
 
 let matchFuncColors = (mathFunction, color) => {
     mathFunction.querySelectorAll("input").forEach((input) => {
         input.style = "border: 1px solid " + color + ";";
-        console.log(input);
     });
 };
 
 let draw = (functions) => {
     functions.forEach( (mathFunction, i) => {
-        clearDomainErrs(mathFunction);
+        resetFuncErrs(mathFunction);
         try {
         let functionExp = math.compile(mathFunction.querySelector(`.func-exp`).value);
         let domainMin = mathFunction.querySelector(`.domain-min`).value;
         let domainMax = mathFunction.querySelector(`.domain-max`).value;
 
-        domainErrCheck(mathFunction);
+        checkFuncErrs(mathFunction);
 
         let xValues = math.range(domainMin, domainMax, 0.01).toArray();
         let yValues = xValues.map( (x) => functionExp.evaluate({x: x}));
@@ -84,6 +87,7 @@ let draw = (functions) => {
         }
         catch (err) {
             console.log(err);
+            mathFunction.querySelector(".func-exp").setAttribute("data-valid", "false");
         }
     });
     
@@ -109,7 +113,8 @@ document.querySelector("#add-more").onclick = () => {
     newFunction.setAttribute("class", "function");
     newFunction.setAttribute("id", "function-" + numFunctions);
     newFunction.innerHTML = `<i class="remove-func" id="remove-func-${numFunctions}" aria-hidden="true">&times;</i>
-                            <label for="func-exp-${numFunctions}" >y=</label><input type="text" class="func-exp" id="func-exp-${numFunctions}">
+                            <label for="func-exp-${numFunctions}" >y=</label><input type="text" data-valid="true" 
+                            class="func-exp" id="func-exp-${numFunctions}">
                             <input type="number" value="-6" class="domain domain-min" id="domain-min-${numFunctions}">
                             <span>&le;x&le;</span>
                             <input type="number" value="6" class="domain domain-max" id="domain-max-${numFunctions}">`;

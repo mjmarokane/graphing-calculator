@@ -39,7 +39,7 @@ body {
     box-shadow: 2px 2px 2px 0 var(--shadow-color-1);
 }
 
-input[data-error="1"] {
+input[data-error="1"], input[data-valid="false"] {
     background-color: rgb(253, 180, 180);
     border:1px solid rgb(255, 90, 90);
 }
