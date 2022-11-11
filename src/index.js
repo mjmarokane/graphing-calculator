@@ -4,6 +4,7 @@
 const ERR_DOMAIN = 1;
 
 let numFunctions = 1;
+let colors = ['#0000ff', '#cc00cc', '#1aff1a', '#ff6600', '#3399ff', '#ff0000', '#182844'];
 
 let defaultData = () => {
     let functionExp = math.compile("");
@@ -48,14 +49,21 @@ let clearDomainErrs = (mathFunction) => {
     mathFunction.querySelector(`.domain-max`).setAttribute("data-error", `0`);
 };
 
+let matchFuncColors = (mathFunction, color) => {
+    mathFunction.querySelectorAll("input").forEach((input) => {
+        input.style = "border: 1px solid " + color + ";";
+        console.log(input);
+    });
+};
+
 let draw = (functions) => {
-    functions.forEach( function(mathFunction) {
+    functions.forEach( (mathFunction, i) => {
         clearDomainErrs(mathFunction);
         try {
         let functionExp = math.compile(mathFunction.querySelector(`.func-exp`).value);
         let domainMin = mathFunction.querySelector(`.domain-min`).value;
         let domainMax = mathFunction.querySelector(`.domain-max`).value;
-        
+
         domainErrCheck(mathFunction);
 
         let xValues = math.range(domainMin, domainMax, 0.01).toArray();
@@ -64,10 +72,15 @@ let draw = (functions) => {
         let graphData = [{
             x: xValues,
             y: yValues,
+            name: "",
+            marker: {
+            color: colors[i % colors.length]
+            },
             type: 'scatter'
         }];
 
         Plotly.plot("graph", graphData);
+        matchFuncColors(mathFunction, colors[i % colors.length]);
         }
         catch (err) {
             console.log(err);
