@@ -34,29 +34,29 @@ let init = () => {
     Plotly.newPlot("graph", defaultData(), layout);
 };
 
-let domainErrCheck = (domainMin, domainMax, functionIndex) => {
-    domainMin = parseFloat(domainMin);
-    domainMax = parseFloat(domainMax);
-    if (domainMin >= domainMax){
-        document.querySelector(`#domain-min-${functionIndex}`).setAttribute("data-error", `${ERR_DOMAIN}`);
-        document.querySelector(`#domain-max-${functionIndex}`).setAttribute("data-error", `${ERR_DOMAIN}`);
+let domainErrCheck = (mathFunction) => {
+    let domainMin = mathFunction.querySelector(`.domain-min`);
+    let domainMax = mathFunction.querySelector(`.domain-max`);
+    if (parseFloat(domainMin.value) >= parseFloat(domainMax.value)){
+        domainMin.setAttribute("data-error", `${ERR_DOMAIN}`);
+        domainMax.setAttribute("data-error", `${ERR_DOMAIN}`);
     }
 };
 
-let clearDomainErrs = (functionIndex) => {
-    document.querySelector(`#domain-min-${functionIndex}`).setAttribute("data-error", `0`);
-    document.querySelector(`#domain-max-${functionIndex}`).setAttribute("data-error", `0`);
+let clearDomainErrs = (mathFunction) => {
+    mathFunction.querySelector(`.domain-min`).setAttribute("data-error", `0`);
+    mathFunction.querySelector(`.domain-max`).setAttribute("data-error", `0`);
 };
 
-let draw = (functionIndex) => {
-    clearDomainErrs(functionIndex);
-
-    try {
-        let functionExp = math.compile(document.querySelector(`#func-exp-${functionIndex}`).value);
-        let domainMin = document.querySelector(`#domain-min-${functionIndex}`).value;
-        let domainMax = document.querySelector(`#domain-max-${functionIndex}`).value;
+let draw = (functions) => {
+    functions.forEach( function(mathFunction) {
+        clearDomainErrs(mathFunction);
+        try {
+        let functionExp = math.compile(mathFunction.querySelector(`.func-exp`).value);
+        let domainMin = mathFunction.querySelector(`.domain-min`).value;
+        let domainMax = mathFunction.querySelector(`.domain-max`).value;
         
-        domainErrCheck(domainMin, domainMax, functionIndex);
+        domainErrCheck(mathFunction);
 
         let xValues = math.range(domainMin, domainMax, 0.01).toArray();
         let yValues = xValues.map( (x) => functionExp.evaluate({x: x}));
@@ -68,18 +68,23 @@ let draw = (functionIndex) => {
         }];
 
         Plotly.plot("graph", graphData);
-    }
-    catch (err) {
-        console.log(err);
-    }
+        }
+        catch (err) {
+            console.log(err);
+        }
+    });
+    
 };
 
 document.querySelector("#functions").onsubmit = (e) => {
     e.preventDefault();
+    replotAll();
+};
+
+replotAll = () => {
     Plotly.newPlot("graph", layout);
-    for (let i = 1; i <= numFunctions; i++) {
-        draw(i);
-    }
+    let functions = document.querySelectorAll(".function");
+    draw(functions);
 };
 
 document.querySelector("#add-more").onclick = () => {
@@ -89,12 +94,23 @@ document.querySelector("#add-more").onclick = () => {
     let existingFunctions = document.querySelector("#functions");
 
     newFunction.setAttribute("class", "function");
-    newFunction.innerHTML = `<label for="func-exp-1" >y=</label><input type="text" class="func-exp" id="func-exp-${numFunctions}">
-                             <input type="number" value="-6" class="domain" id="domain-min-${numFunctions}">
+    newFunction.setAttribute("id", "function-" + numFunctions);
+    newFunction.innerHTML = `<i class="remove-func" id="remove-func-${numFunctions}" aria-hidden="true">&times;</i>
+                            <label for="func-exp-${numFunctions}" >y=</label><input type="text" class="func-exp" id="func-exp-${numFunctions}">
+                            <input type="number" value="-6" class="domain domain-min" id="domain-min-${numFunctions}">
                             <span>&le;x&le;</span>
-                            <input type="number" value="6" class="domain" id="domain-max-${numFunctions}"></input>`;
-
+                            <input type="number" value="6" class="domain domain-max" id="domain-max-${numFunctions}">`;
     existingFunctions.insertBefore(newFunction, document.querySelector("#add-more"));
+    newFunction.querySelector("#remove-func-" + numFunctions).addEventListener("click", removeFunction);
+};
+
+removeFunction = (event) => {
+    if (numFunctions <= 1) { return; }
+    numFunctions--;
+    let allFunctions = document.querySelector("#functions");
+    let thisFunction = document.querySelector("#" + event.target.parentNode.getAttribute("id"));
+    allFunctions.removeChild(thisFunction);
+    replotAll();
 };
 
 init();
