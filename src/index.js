@@ -6,9 +6,7 @@ const ERR_DOMAIN = 1;
 let numFunctions = 1;
 let colors = ['#0000ff', '#cc00cc', '#1aff1a', '#ff6600', '#3399ff', '#ff0000', '#182844'];
 
-/**
- * Creates function objects compatable with plotly
- */
+/**Creates function objects compatable with plotly*/
 let defaultData = () => {
     let functionExp = math.compile("");
     let xValues = math.range(-6, 6, 0.01).toArray();
