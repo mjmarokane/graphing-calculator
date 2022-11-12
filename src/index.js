@@ -6,6 +6,9 @@ const ERR_DOMAIN = 1;
 let numFunctions = 1;
 let colors = ['#0000ff', '#cc00cc', '#1aff1a', '#ff6600', '#3399ff', '#ff0000', '#182844'];
 
+/**
+ * Creates function objects compatable with plotly
+ */
 let defaultData = () => {
     let functionExp = math.compile("");
     let xValues = math.range(-6, 6, 0.01).toArray();
@@ -31,10 +34,15 @@ let layout = {
     }
   };
 
+/**initialize */
 let init = () => {
     Plotly.newPlot("graph", defaultData(), layout);
 };
 
+/**Check for errors with the function element
+ * @param {Element} mathFunction - function element with a child elements: 
+ * input[class="domain-min"], input[class="domain-max"].
+ */
 let checkFuncErrs = (mathFunction) => {
     //check domain errors
     let domainMin = mathFunction.querySelector(".domain-min");
@@ -45,6 +53,10 @@ let checkFuncErrs = (mathFunction) => {
     }
 };
 
+/**Reset all currently triggered error indicators
+ * @param {Element} mathFunction - function element with a child elements: 
+ * input[class="domain-min"], input[class="domain-max"].
+ */
 let resetFuncErrs = (mathFunction) => {
     //clear domain errors
     mathFunction.querySelector(".domain-min").setAttribute("data-error", `0`);
@@ -53,12 +65,20 @@ let resetFuncErrs = (mathFunction) => {
     mathFunction.querySelector(".func-exp").setAttribute("data-valid", "true");
 };
 
+/**Reset all currently triggered error indicators
+ * @param {Element} mathFunction - function element with a child elements: 
+ * input[class="domain-min"], input[class="domain-max"].
+ * @param {string} color - css valid color (rgb, hex, color name, etc.);
+ */
 let matchFuncColors = (mathFunction, color) => {
     mathFunction.querySelectorAll("input").forEach((input) => {
         input.style = "border: 1px solid " + color + ";";
     });
 };
 
+/**Reset all currently triggered error indicators
+ * @param {Interable List of Elements} functions - list of function Elements.
+ */
 let draw = (functions) => {
     functions.forEach( (mathFunction, i) => {
         resetFuncErrs(mathFunction);
